@@ -1,6 +1,6 @@
 #' ---
-#' title: "TITLE"
-#' author: "AUTHOR"
+#' title: "Dynamic Data Characterization"
+#' author: "Alex F. Bokov"
 #' date: "09/08/2019"
 #' ---
 #' 
@@ -33,7 +33,7 @@ if(length(.packages) > 1 || .packages != '') instrequire(.packages);
 # start logging
 tself(scriptname=.currentscript);
 
-# Use the workdir
+# Use the workdir ----
 .workdir <- getwd();
 # run scripts on which this one depends, if any that have not been cached yet
 .loadedobjects <- load_deps(.deps,cachedir = .workdir);
@@ -66,14 +66,14 @@ panderOptions('table.continues',.oldopt00);
 #' Predictors
 # Uncomment the below line after putting in the actual predictor column names
 # from your dat00
-#predictorvars <- c('FOO','BAR','BAZ','BAT');
+predictorvars <- c('age','sex','trt');
 #' Outcomes
 # Uncomment the below line after putting in the actual outcome column names
 # from your dat00
-#outcomevars <- c('BAN','BAX');
+outcomevars <- c('bili','albumin','alk.phos');
 #' All analysis-ready variables
 # Uncomment the below line after predictorvars and outcomevars already exist
-#mainvars <- c(outcomevars, predictorvars);
+mainvars <- c(outcomevars, predictorvars);
 #' ### Scatterplot matrix (step 10)
 #' 
 #' To explore pairwise relationships between all variables of interest.
@@ -81,7 +81,7 @@ panderOptions('table.continues',.oldopt00);
 # Uncomment the below after mainvars already exists and you have chosen a 
 # discrete variable to take the place of VAR1 (note that you don't quote that
 # one)
-#ggpairs(dat00[,mainvars],mapping=aes(color=VAR1));
+#ggpaired(dat00[,mainvars],mapping=aes(color=trt));
 #' ### Cohort Characterization (step 10)
 #' 
 #' To explore possible covariates

@@ -18,7 +18,7 @@ debug <- 0;
 .packages <- c( '' );
 
 # name of this script
-.currentscript <- "test.R"; 
+.currentscript <- "data_characterization.R"; 
 
 # vector of other scripts which need to run before this one. If none needed, 
 # should be an empty string

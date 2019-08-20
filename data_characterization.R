@@ -15,7 +15,7 @@ debug <- 0;
 
 # vector of additional packages to install, if needed. If none needed, should be
 # an empty string
-.packages <- c( '' );
+.packages <- c( 'GGally' );
 
 # name of this script
 .currentscript <- "data_characterization.R"; 
@@ -66,23 +66,51 @@ panderOptions('table.continues',.oldopt00);
 #' Predictors
 # Uncomment the below line after putting in the actual predictor column names
 # from your dat00
-predictorvars <- c('age','sex','trt');
+predictorvars <- c('age','sex','status');
 #' Outcomes
 # Uncomment the below line after putting in the actual outcome column names
 # from your dat00
-outcomevars <- c('bili','albumin','alk.phos');
+outcomevars <- c('bili','albumin','alk.phos','stage','protime','platelet');
 #' All analysis-ready variables
 # Uncomment the below line after predictorvars and outcomevars already exist
 mainvars <- c(outcomevars, predictorvars);
 #' ### Scatterplot matrix (step 10)
 #' 
 #' To explore pairwise relationships between all variables of interest.
-#+ ggpairs_plot
+#+ ggpairs_plot,message=F,warning=F
 # Uncomment the below after mainvars already exists and you have chosen a 
 # discrete variable to take the place of VAR1 (note that you don't quote that
 # one)
-#ggpaired(dat00[,mainvars],mapping=aes(color=trt));
-#' ### Cohort Characterization (step 10)
+
+# ggpairs() plots a grid of scatterplots, one for each pair of variables. 
+ggpairs(dat00[,mainvars]
+        # The 'mapping' argument sets global values for size and transparency 
+        # (alpha) of the dots in this plot
+        ,mapping=aes(size=I(0.5),alpha=I(0.1))
+        # the 'upper' argument tells the function what to do just in the upper 
+        # right half of the grid for various combinations of of variables that 
+        # it might encounter-- continuous/discrete/combo/na
+        # ...there are similarly structured 'lower' and 'diag' arguments but
+        # we are leaving those at their default values for now.
+        ,upper = list(continuous = wrap("cor",size=3,alpha=1)
+                      ,discrete = "facetbar"
+                      # i.e. one variable is continuous, the other discrete
+                      ,combo = "box_no_facet"
+                      # i.e. what to do when a cell is simply missing.
+                      ,na = "na"));
+
+# This one is like 'ggpairs()' but plots one set of variables against another,
+# so more focused on the comparisons of interest and less redundancy
+ggduo(dat00,predictorvars,outcomevars,mapping=aes(alpha=I(0.1),size=I(0.5)));
+
+# We may return to this one after talking about statistical models
+# ggnostic(step(lm(formula(paste(predictorvars[1],'~.')),data=dat00[,mainvars])
+#               ,trace=F)
+#          ,columnsY = c('.resid','.hat','.sigma','.cooksd','.fitted'
+#                        ,'.se.fit','.std.resid')
+#          ,mapping=aes(alpha=0.1));
+# For more examples, see https://ggobi.github.io/ggally/
+#' ### Cohort Characterization
 #' 
 #' To explore possible covariates
 # Uncomment the below code after mainvars exists and you have chosen a discrete

@@ -39,9 +39,11 @@ vignettes/*.pdf
 # Local configuration
 config.R
 local
+.developer
 
 # Other temp files
 .~lock.*#
+*.R.rdata
 
 # We don't commit data unless we really mean it.
 *.csv

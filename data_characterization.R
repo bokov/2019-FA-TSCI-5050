@@ -15,7 +15,7 @@ debug <- 0;
 
 # vector of additional packages to install, if needed. If none needed, should be
 # an empty string
-.packages <- c( 'GGally' );
+packages <- c( 'GGally','tableone','pander' );
 
 # name of this script
 .currentscript <- "data_characterization.R"; 
@@ -29,7 +29,7 @@ debug <- 0;
 if(debug>0) source('./scripts/global.R',chdir=T) else {
   .junk<-capture.output(source('./scripts/global.R',chdir=T,echo=F))};
 # load any additional packages needed by just this script
-if(length(.packages) > 1 || .packages != '') instrequire(.packages);
+if(length(setdiff(packages,'') > 1)) instrequire(packages);
 # start logging
 tself(scriptname=.currentscript);
 
@@ -52,6 +52,16 @@ tself(scriptname=.currentscript);
 
 #+ echo=F
 # characterization ----
+map0 <- autoread('varmap.csv');
+dct0$column <- make.unique(unlist(submulti(dct0$column,map0,method = 'startsends')));
+names(dat00) <-  dct0$column;
+set.seed(project_seed);
+map0 <- autoread ('varmap.csv');
+dct0$column <- make.unique(unlist(submulti(dct0$column,map0,method = 'startsends')));
+names(dat00) <- dct0$column;
+
+dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];
+
 set.caption('Data Dictionary');
 set.alignment(row.names='right')
 .oldopt00 <- panderOptions('table.continues');
@@ -83,42 +93,20 @@ mainvars <- c(outcomevars, predictorvars);
 # one)
 
 # ggpairs() plots a grid of scatterplots, one for each pair of variables. 
-ggpairs(dat00[,mainvars]
-        # The 'mapping' argument sets global values for size and transparency 
-        # (alpha) of the dots in this plot
-        ,mapping=aes(size=I(0.5),alpha=I(0.1))
-        # the 'upper' argument tells the function what to do just in the upper 
-        # right half of the grid for various combinations of of variables that 
-        # it might encounter-- continuous/discrete/combo/na
-        # ...there are similarly structured 'lower' and 'diag' arguments but
-        # we are leaving those at their default values for now.
-        ,upper = list(continuous = wrap("cor",size=3,alpha=1)
-                      ,discrete = "facetbar"
-                      # i.e. one variable is continuous, the other discrete
-                      ,combo = "box_no_facet"
-                      # i.e. what to do when a cell is simply missing.
-                      ,na = "na"));
+ggpairs(dat01[,mainvars]);
 
 # This one is like 'ggpairs()' but plots one set of variables against another,
 # so more focused on the comparisons of interest and less redundancy
-ggduo(dat00,predictorvars,outcomevars,mapping=aes(alpha=I(0.1),size=I(0.5)));
+# ggduo(dat00,predictorvars,outcomevars,mapping=aes(alpha=I(0.1),size=I(0.5)));
 
-# We may return to this one after talking about statistical models
-# ggnostic(step(lm(formula(paste(predictorvars[1],'~.')),data=dat00[,mainvars])
-#               ,trace=F)
-#          ,columnsY = c('.resid','.hat','.sigma','.cooksd','.fitted'
-#                        ,'.se.fit','.std.resid')
-#          ,mapping=aes(alpha=0.1));
-# For more examples, see https://ggobi.github.io/ggally/
 #' ### Cohort Characterization
 #' 
 #' To explore possible covariates
 # Uncomment the below code after mainvars exists and you have chosen a discrete
 # variable to take the place of VAR1 (this time you do quote it)
-#
-#pander(print(CreateTableOne(
-#  vars = setdiff(mainvars,'VAR1'),strata='VAR1',data = dat00
-#  , includeNA = T), printToggle=F), caption='Group Characterization');
+pander(print(CreateTableOne(vars = mainvars, data = dat01, includeNA = TRUE)
+             , printToggle=FALSE)
+       , caption='Cohort Characterization');
 
 #' ### Data Analysis
 #' 
@@ -145,7 +133,7 @@ message('Done tsaving');
 #' ### Audit Trail
 #+ echo=F
 .wt <- walktrail();
-pander(.wt[order(.wt$sequence),-5],split.tables=Inf,justify='left',missing=''
-       ,row.names=F);
+#pander(.wt[order(.wt$sequence),-5],split.tables=Inf,justify='left',missing=''
+#       ,row.names=F);
 #+ echo=F,eval=F
 c()

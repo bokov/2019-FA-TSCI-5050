@@ -5,5 +5,6 @@ system(paste0('wget -N ',file.path(.url,'.gitmodules')));
 try(devtools::install_github('bokov/tidbits',ref='integration'));
 try(devtools::install_github('bokov/rio',ref='master'));
 try(file.rename('data_characterization.R','.data_characterization.backup'));
-clean_slate(sprintf('.attempt <- %d; if(!require(tidbits) && .attempt < 3) source("%s%s")',.attempt+1,.url,.thisfile));
+.onrestart <- parse(text=sprintf('.attempt <- %d; if(!require(tidbits) && .attempt < 3) source("%s/%s")',.attempt+1,.url,.thisfile));
+clean_slate(.onrestart);
 c()

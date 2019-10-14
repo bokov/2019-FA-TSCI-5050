@@ -8,11 +8,12 @@ try(file.rename('data_characterization.R','.data_characterization.backup'));
 
 try(message('.attempt = ',.attempt));
 
-if(file.exists('scripts/bootstrap.Rprofile')){
-  source('scripts/bootstrap.Rprofile');
-  .onrestart <- sprintf('.attempt <- %d;
+.onrestart <- sprintf('.attempt <- %d;
                          if(!require(tidbits) && .attempt < 3) source("%s/%s")'
                         ,.attempt+1,.url,.thisfile);
+
+if(file.exists('scripts/bootstrap.Rprofile')){
+  source('scripts/bootstrap.Rprofile');
   clean_slate(.onrestart);
 }
 c()

@@ -6,7 +6,7 @@ try(devtools::install_github('bokov/tidbits',ref='integration'));
 try(devtools::install_github('bokov/rio',ref='master'));
 try(file.rename('data_characterization.R','.data_characterization.backup'));
 
-try(message('.attempt = ',.attempt));
+try(message('\n******\n.attempt = ',.attempt,'\n\n'));
 
 .onrestart <- sprintf('.attempt <- %d;
                          if(!require(tidbits) && .attempt < 3) source("%s/%s")'

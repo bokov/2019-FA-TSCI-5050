@@ -5,6 +5,8 @@
 # Session Data files
 *.RData
 *.rdata
+*.rda
+*.rds
 
 # Example code in package build process
 *-Ex.R
@@ -52,5 +54,6 @@ local
 *.xlsx
 *.ods
 *.html
+/data/
 
 

@@ -37,6 +37,7 @@ vignettes/*.pdf
 .Rproj.user
 *.Rproj
 *.Rout
+*.pdf
 
 # Local configuration
 config.R

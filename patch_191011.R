@@ -6,6 +6,8 @@ try(devtools::install_github('bokov/tidbits',ref='integration'));
 try(devtools::install_github('bokov/rio',ref='master'));
 try(file.rename('data_characterization.R','.data_characterization.backup'));
 
+try(message('.attempt = ',.attempt));
+
 if(file.exists('scripts/bootstrap.Rprofile')){
   source('scripts/bootstrap.Rprofile');
   .onrestart <- sprintf('.attempt <- %d;

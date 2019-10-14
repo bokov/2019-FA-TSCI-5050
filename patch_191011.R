@@ -2,6 +2,8 @@ if(!exists('.url')) .url <- 'https://raw.githubusercontent.com/bokov/2019-FA-TSC
 if(!exists('.thisfile')) .thisfile <- 'patch_191011.R';
 if(!exists('.attempt')) .attempt <- 1;
 system(paste0('wget -N ',file.path(.url,'.gitmodules')));
+system(paste0('wget -N ',file.path(.url,'.gitignore')));
+system('git rm *.rdata');
 try(devtools::install_github('bokov/tidbits',ref='integration'));
 try(devtools::install_github('bokov/rio',ref='master'));
 try(file.rename('data_characterization.R','.data_characterization.backup'));

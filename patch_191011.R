@@ -12,6 +12,8 @@ try(message('\n******\n.attempt = ',.attempt,'\n\n'));
                          if(!require(tidbits) && .attempt < 3) source(\"%s/%s\")')"
                         ,.attempt+1,.url,.thisfile);
 
+try(message('\n******\n.onrestart:\n',.onrestart,'\n\n'));
+
 if(file.exists('scripts/bootstrap.Rprofile')){
   source('scripts/bootstrap.Rprofile');
   eval(parse(text=.onrestart));

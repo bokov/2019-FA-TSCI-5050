@@ -47,4 +47,9 @@ local
 
 # We don't commit data unless we really mean it.
 *.csv
+*.xls
+*.dat
+*.xlsx
+*.ods
+
 

@@ -53,10 +53,14 @@ predictorvars <- sample(setdiff(dct0$column,'id'),5);
 outcomevars <- sample(setdiff(dct0$column,c(predictorvars,'id')),3);
 #' All analysis-ready variables
 mainvars <- c(outcomevars, predictorvars);
-
+#' Stratifying variable
+stratvars <- 'status';
+#' A list of numeric variables that ought to be treated as discrete
+ordvars <- v(c_ordinal);
 
 #' Convert the above to `ordered` variables
 #+ ordvars
+for(ii in ordvars) dat00[[ii]] <- ordered(dat00[[ii]]);
 
 #+ devsample
 set.seed(project_seed);
@@ -66,14 +70,15 @@ dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];
 #' 
 #' To explore pairwise relationships between all variables of interest.
 #+ ggpairs_plot, message=FALSE, warning=FALSE
-ggpairs(dat01[,mainvars]);
+ggpairs(dat01[,mainvars],mapping=aes_string(colour=stratvars,alpha=0.4)
+        ,size=0.25);
 
 #' ### Cohort Characterization
 #' 
 #' To explore possible covariates
 set.alignment(default='right',row.names='right');
-pander(print(CreateTableOne(vars = mainvars
-                            , data=dat01, includeNA=TRUE)
+pander(print(CreateTableOne(vars = setdiff(mainvars,stratvars)
+                            , strata = stratvars, data=dat01, includeNA=TRUE)
              , printToggle=FALSE),split.tables=Inf
        ,caption='Cohort Characterization');
 
@@ -82,7 +87,27 @@ pander(print(CreateTableOne(vars = mainvars
 #' Fitting the actual statistical models.
 #+ univar_prep, echo=TRUE, message=TRUE
 # univariate analysis ----
+univar <- list(); 
+for(yy in outcomevars){
+  univar[[yy]] <- sapply(predictorvars,function(xx){
+    lm(paste(yy,'~',xx),data=dat01) %>% glance
+    },simplify=F) %>% bind_rows(.id='predictor') %>% 
+    arrange(AIC)};
 
+.oldopt01 <- panderOptions();
+# Make pander print things from inside the for loop
+panderOptions('knitr.auto.asis', FALSE);
+# Don't split the tables
+panderOptions('table.split.table', Inf);
+#+ univar_tables, results='asis'
+for(ii in names(univar)){
+  pander(univar[[ii]],caption=paste('Univariate predictors of',ii))};
+#+ cleanup, echo = FALSE
+panderOptions('knitr.auto.asis',.oldopt01$knitr.auto.asis);
+panderOptions('table.split.table',.oldopt01$table.split.table);
+
+#+ univar_plots, warning=FALSE
+ggduo(dat01,aes(alpha=0.1),columnsX = predictorvars,columnsY = outcomevars);
 
 #+ wrapup, echo=FALSE,warning=FALSE,message=FALSE
 #===========================================================#

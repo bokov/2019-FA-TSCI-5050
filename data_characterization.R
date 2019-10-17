@@ -56,7 +56,7 @@ mainvars <- c(outcomevars, predictorvars);
 #' Stratifying variable
 stratvars <- 'status';
 #' A list of numeric variabls that ought to be treated as discrete
-ordvars <- dct0[dct0$c_ordinal,'column'];
+ordvars <- v(c_ordinal);
 
 #' Convert the above to `ordered` variables
 for(ii in ordvars) dat00[[ii]] <- ordered(dat00[[ii]]);
@@ -68,7 +68,7 @@ dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];
 #' 
 #' To explore pairwise relationships between all variables of interest.
 #+ ggpairs_plot, message=FALSE, warning=FALSE
-ggpairs(dat01[,mainvars],mapping=aes(color=stratvars));
+ggpairs(dat01[,mainvars],mapping=aes_string(color=stratvars));
 
 #' ### Cohort Characterization
 #' 

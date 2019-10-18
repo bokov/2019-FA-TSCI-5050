@@ -57,7 +57,7 @@ mainvars <- c(outcomevars, predictorvars);
 
 #' Convert the above to `ordered` variables
 #+ ordvars
-
+for(ii in v(c_ordinal)) {dat00[[ii]] <- as.factor(dat00[,ii])}
 #+ devsample
 set.seed(project_seed);
 dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];

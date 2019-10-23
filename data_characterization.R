@@ -53,8 +53,6 @@ dat00 <- droplevels(dat00)
 #'          
 #'          
 #' 
-set.seed(project_seed)
-dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];
 
 
 set.caption('Data Dictionary');
@@ -69,9 +67,15 @@ panderOptions('table.continues',.oldopt00);
 #' ### Select predictor and outcome variables
 #' 
 #' Predictors
-predictorvars <- c('SCR2','SCR3');
+predictorvars <- c('SCR2','SCR4','RACE9','HISP','Q1A','Q1C','Q1D');
 #' Outcomes
-outcomevars <- c('Q1A','Q1C');
+outcomevars <- c('SCR3','SCR5');
+for(ii in outcomevars) dat00[[ii]] <- ifelse(dat00[[ii]] %in% c('(1) Yes','(2) No')
+                                             ,dat00[[ii]],NA);
+
+set.seed(project_seed)
+dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];
+
 #' All analysis-ready variables
 mainvars <- c(outcomevars, predictorvars);
 #' ### Scatterplot matrix)

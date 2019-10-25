@@ -12,7 +12,7 @@ knitr::opts_chunk$set(comment=''); options(width=100);
 # name of this script
 .currentscript <- "hw02.R"; 
 # other scripts which need to run before this one.
-.deps <- c( 'dictionary.R','data_characterization.R'); 
+.deps <- c( 'data_characterization.R'); 
 .junk<-capture.output(source('./scripts/global.R',chdir=T,echo=F,verbose=F));
 #===========================================================#
 ###### Start of homework questions and your responses  ######
@@ -73,7 +73,7 @@ aa
 #' ***
 #' Now let's fit our linear regression model using just one of these formulas at
 #' first.
-bb <- lm(aa[1],dat01);
+bb <- glm(aa[1],dat01,family='binomial');
 summary(bb);
 #' It looks wierd though, doesn't it? Instead of the *value* of `aa[1]`, which
 #' is ``r aa[1]``, it literally says `aa[1]`. We can fix that using the 
@@ -84,21 +84,21 @@ summary(bb);
 #' side effect it will expand the `aa[1]` into the actual formula it represents.
 cc <- update(bb,.~.);
 summary(cc);
-#' That's better. We can get a concise, one-line summary using the `glance()` 
+#' That's better. We can get a concise, one-line summary using the `tidy()` 
 #' command from the `broom` package.
-dd <- glance(cc);
+dd <- tidy(cc);
 dd
 #' Here are all the steps we just did, one after another:
 aa <- paste(outcomevars[1], "~", predictorvars);
-bb <- lm(aa[1],dat01);
+bb <- glm(aa[1],dat01,family='binomial');
 cc <- update(bb,.~.);
-dd <- glance(cc);
+dd <- tidy(cc);
 #' That's a lot of steps, and a lot of variables to create if all you need is
 #' `dd`. Let's consolidate them into one expression.
 #' 
 #' Remember, if an expression returns the same value as a variable, you can 
 #' substitute in the expression in place of the variable and vice versa:
-identical( glance(cc) , glance(update(bb,.~.)) );
+identical( tidy(cc) , tidy(update(bb,.~.)) );
 #' **Question 1.4:** Rewrite the above steps so that they are all one expression
 #' by substituting in the command from each step, one after the other. I'll got
 #' you started by substituting in `cc`, but now there is a `bb`. You do the 
@@ -108,7 +108,7 @@ identical( glance(cc) , glance(update(bb,.~.)) );
 #' **Answer 1.4:** (complete the code below)
 #+ answer1_4----
 
-ee <- glance(update(bb,.~.));
+ee <- tidy(update(bb,.~.));
 
 
 #'                                                                                                            `r if(!identical(dd,ee)) "\n_There is an error in the above code, please review your answer._\n"`
@@ -144,7 +144,7 @@ AA <- list();
 #' Then for each formula we create a model and add it to the list.
 
 for(xx in aa){
-  AA[[xx]] <- update(lm(xx,dat01),.~.);
+  AA[[xx]] <- update(glm(xx,dat01,family='binomial'),.~.);
 }
 
 #' It will take too much space to print out `AA` but here is a summary of it:
@@ -174,7 +174,7 @@ summary(AA);
 #+ echo=FALSE
 # Part 3 ----
 #' #### Part 3. {#part3}
-#' **Question 3.1:** Now `AA` is a list of `lm` objects, containing 
+#' **Question 3.1:** Now `AA` is a list of `glm` objects, containing 
 #' ``r outcomevars[1]`` regressed against each of the `predictorvars`. We need 
 #' to do the same thing for the remaining `outcomevars`. We can put the loop 
 #' from [part 2](#part2) inside another loop and that one will iterate over `outcomevars`. 
@@ -193,7 +193,7 @@ for(yy in outcomevars){
      AGAIN, NO QUOTES!'
   }
 }
-#' `r if(identical(unique(c(sapply(models00,sapply,class))),'lm')) "_You did it! Good job._" else "_Keep trying, you'll get it. Maybe try question 3.2 below if you're stuck._"`
+#' `r if(identical(unique(c(sapply(models00,sapply,class))),'glm')) "_You did it! Good job._" else "_Keep trying, you'll get it. Maybe try question 3.2 below if you're stuck._"`
 #' 
 #' ***
 #' 
@@ -247,7 +247,7 @@ for(yy in outcomevars){
 #' the report).
 #+ part4glance, eval=!is(try(models00[[1]][[1]]),'try-error')
 
-glance(models00[[1]][[1]]);
+tidy(models00[[1]][[1]])[-1,];
 
 #' To do all the models for ``r outcomevars[1]`` we could use a `for` loop, but 
 #' R provides another way to do this that's important for you to learn, and you
@@ -262,19 +262,19 @@ glance(models00[[1]][[1]]);
 #' 
 #' 2. The second argument is a function *without parentheses*. That's because 
 #' `foo()` returns the *results* of that function but `foo` returns a copy of 
-#' *the function itself*. We're going to use the `glance` function:
-#' `sapply(models00[[1]],glance)`.
+#' *the function itself*. We're going to use the `tidy` function:
+#' `sapply(models00[[1]],tidy)`.
 #' 
 #' 3. We add one last argument that will be passed  `sapply()` itself: 
 #' `simplify=F`. This is to insure the results come out as a `list`. So the 
 #' final version is: 
-#' `sapply(models00[[1]],glance,simplify=FALSE)`
+#' `sapply(models00[[1]],tidy,simplify=FALSE)`
 #' 
 #' (if you correctly answered question 3.1, the code below will show a result in
 #' the report).
-#+ part4sapply, eval=!is(.test00<-bind_rows(sapply(models00[[1]],glance,simplify=FALSE)),'try-error') && 'p.value' %in% names(.test00)
+#+ part4sapply, eval=!is(.test00<-bind_rows(sapply(models00[[1]],tidy,simplify=FALSE)),'try-error') && 'p.value' %in% names(.test00)
 
-sapply(models00[[1]],glance,simplify=FALSE);
+sapply(models00[[1]],tidy,simplify=FALSE);
 
 #' Now we can use the `bind_rows()` command from the `dplyr` package. As its 
 #' first argument `bind_rows` takes a `list` and as its `.id` argument it 
@@ -284,7 +284,7 @@ sapply(models00[[1]],glance,simplify=FALSE);
 #' the report).
 #+ part4bindrows, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 
-bind_rows(sapply(models00[[1]],glance,simplify=FALSE),.id='model');
+bind_rows(sapply(models00[[1]],tidy,simplify=FALSE),.id='model');
 
 #' To arrange this table in order of increasing `p.value` we can use the 
 #' `arrange_()` command from `dplyr` (the `_` is intentional, not a typo). 
@@ -294,7 +294,11 @@ bind_rows(sapply(models00[[1]],glance,simplify=FALSE),.id='model');
 #' the report).
 #+ part4arrange, warning=FALSE, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 
-arrange_(bind_rows(sapply(models00[[1]],glance,simplify=FALSE),.id='model'),'p.value');
+arrange_(bind_rows(sapply(models00[[1]],tidy,simplify=FALSE),.id='model'),'p.value');
+
+#' We need to get rid of the intercept terms since we aren't using them for hypotheses tests.
+#+ part4subset, warning=FALSE, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
+subset(arrange_(bind_rows(sapply(models00[[1]],tidy,simplify=FALSE),.id='model'),'p.value'),term != '(Intercept)');
 
 #' By the way, when you see a list of p-values being used to to pick between 
 #' several items, your instinct should be to correct them for multiple 
@@ -307,7 +311,7 @@ arrange_(bind_rows(sapply(models00[[1]],glance,simplify=FALSE),.id='model'),'p.v
 #' the report).
 #+ part4padjust, warning=FALSE, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 
-BB <- arrange_(bind_rows(sapply(models00[[1]],glance,simplify=FALSE),.id='model'),'p.value');
+BB <- subset(arrange_(bind_rows(sapply(models00[[1]],tidy,simplify=FALSE),.id='model'),'p.value'),term != '(Intercept)');
 BB[['p.value']];
 BB[['p.value']] <- p.adjust(BB[['p.value']]);
 BB[['p.value']];
@@ -323,18 +327,20 @@ BB[['p.value']];
 #' the report).
 #+ part4mutate, warning=FALSE, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 
-mutate(arrange_(bind_rows(sapply(models00[[1]],glance,simplify=FALSE),.id='model'),'p.value'),p.value=p.adjust(p.value));
+mutate(subset(arrange_(bind_rows(sapply(models00[[1]],tidy,simplify=FALSE),.id='model'),'p.value'),term != '(Intercept)'),p.value=p.adjust(p.value));
 
 #' Maybe expressing it with linke breaks as below makes it clearer which 
 #' arguments go with which nested function:
 #+ part4breakdown, eval=FALSE
 mutate(
-  arrange_(
-    bind_rows(
-      sapply(
-        models00[[1]],glance,simplify=FALSE
-        ),.id='model'
-      ),'p.value'
+  subset(
+    arrange_(
+      bind_rows(
+        sapply(
+          models00[[1]],tidy,simplify=FALSE
+          ),.id='model'
+        ),'p.value'
+      ),term != '(Intercept)'
     ),p.value=p.adjust(p.value)
   );
 #' This is still kind of confusing because the first command that gets executed
@@ -349,7 +355,7 @@ mutate(
 #' the report).
 #+ part4pipe, warning=FALSE, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 
-sapply(models00[[1]],glance,simplify = FALSE) %>% bind_rows(.id='model');
+sapply(models00[[1]],tidy,simplify = FALSE) %>% bind_rows(.id='model');
 
 #' Notice how in `bind_rows(.id='model')` we skip right over the first argument
 #' and go straight to the second one. Now lets add the next step, `arrange_()`. 
@@ -357,22 +363,22 @@ sapply(models00[[1]],glance,simplify = FALSE) %>% bind_rows(.id='model');
 #' the report).
 #+ part4pipearrange, warning=FALSE, eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 
-sapply(models00[[1]],glance,simplify = FALSE) %>% 
+sapply(models00[[1]],tidy,simplify = FALSE) %>% 
   bind_rows(.id='model') %>%
   arrange_('p.value');
 
 #' To avoid the command being too long, I put a line break _after_ each `%>%`
 #' (putting line breaks before the `%>%`s would not have worked).
 #' 
-#' **Question 4.1:** Now it's your turn. Add the `mutate()` step to the end
-#' of this pipeline.
+#' **Question 4.1:** Now it's your turn. Add the `subset()` and `mutate()` steps 
+#' to the end of this pipeline.
 #' 
 #' **Answer 4.1:** 
 #' (complete the code below once you have successfully answered question 3.1).
 #+ answer4_1,warning=FALSE,eval=!is(.test00,'try-error') && 'p.value' %in% names(.test00)
 # answer4_1----
 
-CC <- sapply(models00[[1]],glance,simplify = FALSE) %>% 
+CC <- sapply(models00[[1]],tidy,simplify = FALSE) %>% 
   bind_rows(.id='model') %>% 
   arrange_('p.value') 
 

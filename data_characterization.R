@@ -70,8 +70,11 @@ panderOptions('table.continues',.oldopt00);
 predictorvars <- c('SCR2','SCR4','RACE9','HISP','Q1A','Q1C','Q1D');
 #' Outcomes
 outcomevars <- c('SCR3','SCR5');
-for(ii in outcomevars) dat00[[ii]] <- ifelse(dat00[[ii]] %in% c('(1) Yes','(2) No')
-                                             ,dat00[[ii]],NA);
+#' Trim down the two outcomes to just the main responses
+for(ii in outcomevars) dat00[[ii]] <- factor(dat00[[ii]],levels=c('(1) Yes','(2) No'));
+#' The below line causes changes to `dat00` to get saved at the end so other scripts can use them.
+.origfiles <- setdiff(.origfiles,'dat00');
+
 
 set.seed(project_seed)
 dat01 <- dat00[sample(nrow(dat00), nrow(dat00)/2),];

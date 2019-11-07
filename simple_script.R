@@ -5,11 +5,11 @@
 #' date: "November 6, 2019"
 #' ---
 
-#' # Load Libraries 
+#' # Set Variables
 #' 
 #' Automation exists
 #' 
-#' # Set Variables
+#' # Load Libraries 
 #' 
 #' Automation exists
 #' 

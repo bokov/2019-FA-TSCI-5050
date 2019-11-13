@@ -1,10 +1,11 @@
 #' 
 message('
-This script will copy files off the internet into your current directory, 
-', getwd(),'. If you have any files with matching names, they will be 
-overwritten. So, if you are in doubt, you should run it from an empty directory
-(or one that you have backed up). This script will probably also install or 
-update R-packages on your computer, and it may take a while.
+This script will run scripts remotely off the internet and copy files off the 
+internet into your current directory,', getwd(),'. If you have any files with 
+matching names, they will be overwritten. So, if you are in doubt, you should 
+run this script from an empty directory (or one that you have backed up). This 
+script will probably also install or update R-packages on your computer, and it 
+may take a while.
         
 You are running this at your own risk and with no warranty whatsoever.');
 .menu01 <- menu(c('This is what I expected, go ahead.'
@@ -145,11 +146,17 @@ while(.menu02 != 0){
     .inputdata_names <- make.names(.inputdata_names,unique=TRUE);
   }
 }
+
+#' Update hooks.
+if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R');
+
 #' TODO: actually create an updated `config.R` from this data
 #' TODO: update the scripts to handle a vector-valued `inputdata`
 #' TODO: decide what to do when inputdata doesn't exist in downloaded config.R
 #' TODO: decide what to do when inputdata exists but some or all files don't exist
 #' TODO: decide what to do when inputdata exists and files do all exist
+#' TODO: recommend chocolatey and git install for Windows users
+#' TODO: recommend git install for MacOS and Linux users if missing
 
 #' Based on the response, create a `local.config.R` file
 #' 

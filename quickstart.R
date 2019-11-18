@@ -8,9 +8,9 @@ script will probably also install or update R-packages on your computer, and it
 may take a while.
         
 You are running this at your own risk and with no warranty whatsoever.');
-.menu01 <- if(!interactive()) 3 else c();
+.menu01 <- if(!interactive()) 3 else -1;
 if(file.exists('.auto.menu01.R')).menu01 <- source('.auto.menu01.R')$value;
-if(is.null(.menu01)){
+if(.menu0 == -1){
   .menu01 <- menu(c('This is what I expected, go ahead.'
                     ,'Go ahead, but first create an empty directory.'
                     ,'Stop this script without making any changes to my computer.'

@@ -52,7 +52,8 @@ to it.
 #' TODO: parse own URL
 #' 
 #' Install needed libraries
-message('Installing needed packages and their dependencies');
+message('Installing needed packages and their dependencies.'
+        ,'This may take a while, please be patient.');
 if(!require('devtools')){
   install.packages('devtools',dependencies=TRUE
                    ,repos=getOption('repos','https://cran.rstudio.com'))};

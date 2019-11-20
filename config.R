@@ -4,24 +4,21 @@
 #' date: "10/18/2018"
 #' ---
 #' 
-#' Please copy this file to `config.R`, edit that copy, and copy it over to
-#' the working directory whenever you check out this project. This is just an
-#' example of what computer-specific variables should be set. A file needs to be 
-#' called `config.R` in order to be used as a source of configuration 
-#' information by our scripts
+#### inputdata ####
 #' 
+#' The inputdata variable determines which data files will get read into your
+#' project. The values are the file locations and the names are the variables
+#' to which they will be assigned after they are read into R
+#' 
+#' In the `config.R` file there should only be simulations of your actual data
+#' or datasets that you are _certain_ you have permission to redistribute 
+#' publicly.
+#' 
+#' If there is also a `local.config.R` file, that one will override `config.R`
+#' and that one can contain paths to actual data, presumably on each 
+#' collaborator's local computer.
 inputdata <- 'data/example_data_pbc.csv';
-#' 
-#' Do you know what character is used to delimit your files? Usually it's either
-#' comma or tab, but it could be anything. If you're not sure, leave this 
-#' commented out, and the scripts will try to guess it for you.
-#file_delim <- '\t';
-#' Your data dictionary file (if/when you have one, uncomment this line)
-#dctfile_raw <- 'WHERE_I_KEEP_MY_DATA/MY_DATA_DICTIONARY.csv';
-
-#+ echo=F,eval=F
-# Do not edit below this line
-try(if(!is.null(.localconf<-find_relpath('config.local.R'))){
-  source(.localconf)});
-try(if(!is.null(.relpath<-find_relpath(inputdata))) inputdata<-.relpath[1]);
+#### footer ####
 c()
+
+

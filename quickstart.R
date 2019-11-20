@@ -49,6 +49,8 @@ to it.
 
 .templatepath <- 'https://github.com/bokov/2019-FA-TSCI-5050/archive/ft_simplescript.zip';
 .scriptspath <- 'https://github.com/bokov/ut-template/archive/master.zip';
+.oldoptions <- options();
+options(browser='false'); # to make usethis::use_zip calm down a little bit
 .checkenv <- new.env();
 #' TODO: parse own URL
 #' 
@@ -80,6 +82,7 @@ mergedirs(.ztemp0);
 #' Rename it to its standard local name
 unlink(.scriptsinfo$path,recursive = TRUE,force = TRUE);
 file.rename(.ztemp1,.scriptsinfo$path);
+options(browser=.oldoptions$browser); # restore the browser option
 #' For setting inputdata
 #' 
 .userconfigdone <- FALSE;

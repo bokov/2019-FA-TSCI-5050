@@ -119,7 +119,6 @@ while(.confmain<4 || length(.inputdata)==0){
                                                          )))
          ,message('RENAME VAR')
          ,message('REMOVE PATH'));
-  next;
 }
 .userconfigdone <- FALSE;
 #' While !.userconfigdone

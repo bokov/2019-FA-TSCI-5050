@@ -51,7 +51,12 @@ to it.
 .scriptspath <- 'https://github.com/bokov/ut-template/archive/master.zip';
 .oldoptions <- options();
 options(browser='false'); # to make usethis::use_zip calm down a little bit
-.checkenv <- new.env();
+.tempenv00 <- new.env();
+if(file.exists('autoresponse.R')){
+  source('autoresponse.R',local = .tempenv00);
+  for(ii in ls(.tempenv())) stack(ii);
+};
+
 #' TODO: parse own URL
 #' 
 #' Install needed libraries
@@ -79,12 +84,43 @@ mergedirs(.ztemp0);
 .ztemp1 <- usethis::use_zip(
   with(.scriptsinfo,paste0(url,'/archive/',c(branch,'master')[1],'.zip'))
   ,'.',cleanup = TRUE);
-#' Rename it to its standard local name
+#' Remove the existing scripts directory
 unlink(.scriptsinfo$path,recursive = TRUE,force = TRUE);
+#' Rename the newly downloaded one to scripts
 file.rename(.ztemp1,.scriptsinfo$path);
+if(file.exists(.localfns <- file.path(.scriptsinfo$path,'functions.R'))){
+  source(.localfns)};
 options(browser=.oldoptions$browser); # restore the browser option
 #' For setting inputdata
 #' 
+.inputdata <- smartsetnames(smartfilechoose('data/example_data_pbc.csv'
+                                       ,pop('confchfile')));
+# TODO: the same within loop, and grow with each cycle
+# TODO: print .inputdata as part of extramessage
+.confmain <- -1;
+while(.confmain<4 || length(.inputdata)==0){
+  .confmain <- smartmenu(c( 'Select an additional file.'
+                           ,'Change the name of a variable.'
+                           ,'Unselect one of the files.'
+                           ,'Save selections and continue.'
+                           ),batchmode = 4,autoresponse = pop('confchfile')
+                         ,title = 'What do you wish to do?'
+                         ,extramessage = {
+                           ui_line(
+'\n\nThese are the files you have chosen and the variable names to which they will
+ be assigned after getting imported into R:\n');
+                           for(ii in names(.inputdata)){
+                             ui_line(
+                               '{ui_field(ii)}\t{ui_path(.inputdata[ii])}')}});
+  switch(.confmain
+         ,.inputdata <- smartsetnames(c(.inputdata
+                                        ,smartfilechoose('data/example_data_pbc.csv'
+                                                         ,auto=pop('confchfile')
+                                                         )))
+         ,message('RENAME VAR')
+         ,message('REMOVE PATH'));
+  next;
+}
 .userconfigdone <- FALSE;
 #' While !.userconfigdone
 #' Select a data file to include

@@ -158,83 +158,10 @@ source('scripts/snippets.R');
                                                ,collapse='\n ,'),'\n);');
 writeLines(unlist(.newconfig),'local.config.R');
 .userconfigdone <- FALSE;
-#' While !.userconfigdone
-#' Select a data file to include
-#' These are the data-files you selected so far and the variables into which
-#' they will be read. What do you wish to do next?
-#' [0. Re-display this menu]
-#' 1. Start over (remove all the files in this list)
-#' 2. Add more files
-#' 3. Edit one of the variable names
-#' 4. Done
-#' 
-#' If edit: 
-#' Which variable do you wish to rename 
-#' (hit 0 or XX to go back to previous menu)
-#' 
-#' If selected a variable:
-#' Please note that your variable names might get modified for compatibility 
-#' with R and uniqueness. Hit 'enter' if you no longer wish to rename the 
-#' variable XXXXX
-#' What would you like to rename XXXXX to?
-#' 
-#' (redisplay main menu until done)
-
-#' The result:
-#sprintf('inputdata <- c(\n %s\n);',paste0(c('dat01','dat02','dat03'),' = ',replicate(3,'"/tmp/2019-FA-TSCI-5050/data/example_data_pbc.csv"'),collapse='\n,'))
-
-#' 
-#' Check if a data-file exists
-#' 
-#source('config.R',local=.checkenv);
-#.inputdataset <- 'inputdata' %in% ls(.checkenv);
-#.inputdataexists <- file.exists(.checkenv$inputdata);
-#' TODO: talk user through setting up a config.R file
-#' 
-#' Prompt the user for the local data file.
-#' 
-# done_fileread <- FALSE;
-# .inputdata_names <- inputdata <- c();
-# while(!done_fileread){
-#   .filechosen <- try(file.choose());
-#   if(!is(.filechosen,'try-error')){
-#     inputdata <- c(inputdata,.filechosen);
-#     .inputdata_names <- c(.inputdata_names,{
-#       message("Please choose a short name for your data-source, preferably 3 characters or less and lower-case ")
-#       readline("or type the 'return' key to accept a default name: ")});
-#   };
-#   done_fileread <- grepl('done'
-#                          ,{message("\nType the 'return' key to add one more data file. ");
-#                            tolower(
-#                              readline(
-#                                "If you are finished adding files, type 'DONE' and then the 'return' key. "))
-#                            })};
-# .inputdata_names <- gsub('^dat[[:digit:]]{0,2}$','',.inputdata_names);
-# .inputdata_names <- gsub('^inputdata','',.inputdata_names);
-# .inputdata_names[.inputdata_names==''] <- sprintf('dat%02d'
-#                                                   ,seq_len(sum(.inputdata_names=='')));
-# .inputdata_names <- make.names(.inputdata_names,unique=TRUE);
-# .menu02 <- -1;
-# while(.menu02 != 0){
-#   .menu02 <- menu(paste(.inputdata_names,inputdata,sep=' = '),title="Here are the names modified for uniqueness and compatibility with R. Select any that you want to modify further or 0 to accept them and keep going. Please note that names beginning with 'dat' and ending with two digits will always get renumbered consecutively. Certain names that are known to interfere with these scripts will also get replaced with default values.");
-#   if(.menu02>0){
-#     .newname <- readline(paste0('Please type in the new name for '
-#                                 ,.inputdata_names[.menu02]
-#                                 ," or the 'enter' key for a default: "));
-#     .inputdata_names[.menu02] <- .newname;
-#     .inputdata_names <- gsub('^dat[[:digit:]]{0,2}$','',.inputdata_names);
-#     .inputdata_names <- gsub('^inputdata','',.inputdata_names);
-#     .inputdata_names[.inputdata_names==''] <- sprintf('dat%02d'
-#                                                       ,seq_len(sum(
-#                                                         .inputdata_names=='')));
-#     .inputdata_names <- make.names(.inputdata_names,unique=TRUE);
-#   }
-# }
-
 #' Update hooks.
 if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R');
 
-#' TODO: actually create an updated `config.R` from this data
+#' DONE: actually create an updated `local.config.R` from this data
 #' TODO: update the scripts to handle a vector-valued `inputdata`
 #' TODO: decide what to do when inputdata doesn't exist in downloaded config.R
 #' TODO: decide what to do when inputdata exists but some or all files don't exist
@@ -242,7 +169,4 @@ if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R
 #' TODO: recommend chocolatey and git install for Windows users
 #' TODO: recommend git install for MacOS and Linux users if missing
 
-#' Based on the response, create a `local.config.R` file
-#' 
-#' 
 c()

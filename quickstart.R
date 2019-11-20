@@ -148,6 +148,15 @@ previous menu.')}
            }
            });
 }
+#### create config file ####
+source('scripts/snippets.R');
+.newconfig <- filesections('config.R');
+.newconfig$inputdata <- paste0(.snippets$config_inputdata
+                               ,'c(\n  ',paste(sprintf("%s = '%s'"
+                                                       ,names(.inputdata)
+                                                       ,.inputdata)
+                                               ,collapse='\n ,'),'\n);');
+writeLines(unlist(.newconfig),'local.config.R');
 .userconfigdone <- FALSE;
 #' While !.userconfigdone
 #' Select a data file to include

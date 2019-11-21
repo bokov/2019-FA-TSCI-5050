@@ -1,17 +1,20 @@
-#' 
+##### disclaimer ####
 message('
-This script will run scripts remotely off the internet and copy files off the 
-internet into your current directory,', getwd(),'. If you have any files with 
-matching names, they will be overwritten. So, if you are in doubt, you should 
-run this script from an empty directory (or one that you have backed up). This 
-script will probably also install or update R-packages on your computer, and it 
-may take a while.
+This script will run scripts remotely off the internet and copy files from 
+github into your current directory, ', getwd(),'. If you have any files with 
+matching names, they will be be moved to a backup directory so they won\'t get
+overwritten. Before continuing, please make sure that the data for your project
+is available on this computer and you know where it is. YOU WILL BE ASKED FOR 
+THE LOCATIONS OF YOUR DATA FILES. DEPLOYMENT WILL NOT BE ABLE TO PROCEED WITHOUT 
+AT LEAST ONE DATA FILE. This script will probably also install or update 
+R-packages on your computer, and it may take a while. If that\'s a problem, this
+is the time to cancel the deployment.
         
 You are running this at your own risk and with no warranty whatsoever.');
-.menu01 <- if(!interactive()) 3 else -1;
+.menu01 <- if(!interactive()) 2 else -1;
 if(file.exists('.auto.menu01.R')).menu01 <- source('.auto.menu01.R')$value;
 if(.menu01 ==  -1){
-  .menu01 <- menu(c('This is what I expected, go ahead.'
+  .menu01 <- menu(c('Go ahead, I am ready and I know where my data is.'
                     ,'Stop this script without making any changes to my computer.'
                     ))};
 
@@ -24,6 +27,31 @@ Please read the comments in this script to understand what it does, and make
 sure you have backups of all the files in the directory where you run this 
 script (or that you run it in an empty directory). Then, feel free to come back
 and try this at a later time.');
+
+#### deploy directory ####
+if(length(intersect(c('desktop','documents','downloads','rgui.exe','r.exe'
+                      ,'r-portable.exe'),tolower(list.files(all=TRUE))))||
+   normalizePath('~') == normalizePath(getwd()) ||
+   tolower(basename(getwd())) %in% c('desktop','documents','downloads','tmp')){
+  .newdir <- paste0('project.',format(Sys.Date(),'%Y%m%d'));
+  .savepaths <- file.path('~',c('Documents','documents','Desktop','desktop'));
+  if(!is.na(.newdirpath<-match(TRUE,dir.exists(normalizePath(.savepaths))))){
+    .newdir <- file.path(.savepaths[.newdirpath],.newdir)};
+  message(sprintf(
+    "You are currently in the '%s' directory. You may have a hard time finding your 
+project here later. We recommend allowing this script to create a new directory, 
+'%s', and deploy there.",getwd(),.newdir));
+  .menu00 <- if(!interactive()) 1 else -1;
+  if(file.exists('.auto.menu00.R')).menu00 <- source('.auto.menu00.R')$value;
+  sprintf('')
+  while(!.menu00 %in% 1:2){
+    .menu00 <- menu(c(sprintf("Yes, go ahead and deploy to '%s'",.newdir)
+                      ,sprintf("No, I really do want to deploy here, in '%s'"
+                               ,getwd()))
+                    ,title='Where should we deploy this script?')};
+  if(.menu00 == 1){dir.create(.newdir); setwd(.newdir)};
+}
+
 
 gitbootstrap <- function(gitrepos=list(trailR=list(repo='bokov/trailR'
                                                    ,ref='integration')
@@ -43,6 +71,7 @@ gitbootstrap <- function(gitrepos=list(trailR=list(repo='bokov/trailR'
 
 clean_slate <- function(...){gitbootstrap();tidbits:::clean_slate(...)};
 
+#### init ####
 .templatepath <- 'https://github.com/bokov/2019-FA-TSCI-5050/archive/ft_simplescript.zip';
 .scriptspath <- 'https://github.com/bokov/ut-template/archive/master.zip';
 .oldoptions <- options();
@@ -56,9 +85,10 @@ if(file.exists('autoresponse.R')){
 #' TODO: parse own URL
 #' 
 #' Install needed libraries
+#### file copy ####
 message('Installing needed packages and their dependencies.'
         ,'This may take a while, please be patient.');
-gitbootstrap(instreqs = 'usethis');
+gitbootstrap(instreqs = c('crayon','usethis'));
 
 #' 
 #' Copy down the latest version of the specified branch
@@ -81,15 +111,16 @@ file.rename(.ztemp1,.scriptsinfo$path);
 if(file.exists(.localfns <- file.path(.scriptsinfo$path,'functions.R'))){
   source(.localfns)};
 options(browser=.oldoptions$browser); # restore the browser option
-#' For setting inputdata
-#' 
 
+#### confmainloop ####
+readline(ui_todo("
+You will be asked to select a data file you intend to use with this project. 
+Press any key to continue."));
 .inputdata <- smartsetnames(smartfilechoose('data/example_data_pbc.csv'
                                        ,pop('confchfile')));
 # TODO: the same within loop, and grow with each cycle
 # TODO: print .inputdata as part of extramessage
 .confmain <- -1;
-# confmainloop ----
 while(.confmain<4 || length(.inputdata)==0){
   .confmain <- smartmenu(c( 'Select an additional file.'
                            ,'Change the name of a variable.'
@@ -162,7 +193,7 @@ writeLines(unlist(.newconfig),'local.config.R');
 if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R');
 
 #' DONE: actually create an updated `local.config.R` from this data
-#' TODO: update the scripts to handle a vector-valued `inputdata`
+#' DONE: update the scripts to handle a vector-valued `inputdata`
 #' TODO: decide what to do when inputdata doesn't exist in downloaded config.R
 #' TODO: decide what to do when inputdata exists but some or all files don't exist
 #' TODO: decide what to do when inputdata exists and files do all exist

@@ -35,7 +35,9 @@ if(length(intersect(c('desktop','documents','downloads','rgui.exe','r.exe'
    tolower(basename(getwd())) %in% c('desktop','documents','downloads','tmp')){
   .newdir <- paste0('project.',format(Sys.Date(),'%Y%m%d'));
   .savepaths <- file.path('~',c('Documents','documents','Desktop','desktop'));
-  if(!is.na(.newdirpath<-match(TRUE,dir.exists(normalizePath(.savepaths))))){
+  if(!is.na(.newdirpath<-match(TRUE
+                               ,dir.exists(normalizePath(.savepaths
+                                                         ,mustWork = FALSE))))){
     .newdir <- file.path(.savepaths[.newdirpath],.newdir)};
   message(sprintf(
     "You are currently in the '%s' directory. You may have a hard time finding your 

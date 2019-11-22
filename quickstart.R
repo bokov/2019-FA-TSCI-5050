@@ -90,7 +90,7 @@ if(file.exists('autoresponse.R')){
 #### file copy ####
 message('Installing needed packages and their dependencies.'
         ,'This may take a while, please be patient.');
-gitbootstrap(instreqs = c('crayon','usethis'));
+gitbootstrap(instreqs = c('crayon','usethis','rmarkdown'));
 
 #' 
 #' Copy down the latest version of the specified branch
@@ -195,7 +195,8 @@ writeLines(unlist(.newconfig),'local.config.R');
 if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R');
 
 #### load scriports ####
-tidbits:::load_deps(c('simdata.R','dictionary.R'));
+#tidbits:::load_deps(c('simdata.R','dictionary.R'));
+rmarkdown::render('prep_deps.R');
 
 #' DONE: actually create an updated `local.config.R` from this data
 #' DONE: update the scripts to handle a vector-valued `inputdata`

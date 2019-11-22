@@ -197,6 +197,8 @@ if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R
 #### load scriports ####
 #tidbits:::load_deps(c('simdata.R','dictionary.R'));
 rmarkdown::render('prep_deps.R');
+ui_done('Deployment successful, report builds are done.');
+if(file.exists('prep_deps.R')) try(browseURL('prep_deps.html'));
 
 #' DONE: actually create an updated `local.config.R` from this data
 #' DONE: update the scripts to handle a vector-valued `inputdata`

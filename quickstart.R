@@ -194,12 +194,15 @@ writeLines(unlist(.newconfig),'local.config.R');
 #' Update hooks.
 if(file.exists('scripts/quickstart_patch.R')) source('scripts/quickstart_patch.R');
 
+#### load scriports ####
+tidbits:::load_deps(c('simdata.R','dictionary.R'));
+
 #' DONE: actually create an updated `local.config.R` from this data
 #' DONE: update the scripts to handle a vector-valued `inputdata`
-#' TODO: decide what to do when inputdata doesn't exist in downloaded config.R
-#' TODO: decide what to do when inputdata exists but some or all files don't exist
-#' TODO: decide what to do when inputdata exists and files do all exist
-#' TODO: recommend chocolatey and git install for Windows users
+#' MOOT: decide what to do when inputdata doesn't exist in downloaded config.R
+#' MOOT: decide what to do when inputdata exists but some or all files don't exist
+#' MOOT: decide what to do when inputdata exists and files do all exist
+#' TODO: recommend ~~chocolatey and~~ git install for Windows users
 #' TODO: recommend git install for MacOS and Linux users if missing
 
 c()

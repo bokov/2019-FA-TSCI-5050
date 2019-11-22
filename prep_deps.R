@@ -16,7 +16,6 @@
 #' Normally this is where calculations should go, but this script is invoked for
 #' its side effects: triggering all the other scripts.
 
-save(file=paste0(.currentscript,'.rdata'),list=setdiff(ls(),.origfiles)
-      ,verbose=FALSE);
+save(file=paste0(.currentscript,'.rdata'),list=setdiff(ls(),.origfiles));
 #+ echo=FALSE
 c()

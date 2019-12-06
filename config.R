@@ -17,7 +17,7 @@
 #' If there is also a `local.config.R` file, that one will override `config.R`
 #' and that one can contain paths to actual data, presumably on each 
 #' collaborator's local computer.
-inputdata <- 'data/example_data_pbc.csv';
+inputdata <- c(dat01='data/example_data_pbc.csv');
 #### footer ####
 c()
 

@@ -116,8 +116,8 @@ options(browser=.oldoptions$browser); # restore the browser option
 
 #### confmainloop ####
 readline(ui_todo("
-You will be asked to select a data file you intend to use with this project. 
-Press any key to continue."));
+You will be asked to select the main data file you intend to use with this 
+project. Press any key to continue."));
 .inputdata <- smartsetnames(smartfilechoose('data/example_data_pbc.csv'
                                        ,pop('confchfile')));
 # TODO: the same within loop, and grow with each cycle

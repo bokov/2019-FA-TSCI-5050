@@ -115,6 +115,8 @@ if(file.exists(.localfns <- file.path(.scriptsinfo$path,'functions.R'))){
 options(browser=.oldoptions$browser); # restore the browser option
 
 #### confmainloop ####
+if(file.exists('.auto.confch.R')) stack(source('.auto.confch.R')$value
+                                        ,'confchfile');
 readline(ui_todo("
 You will be asked to select the main data file you intend to use with this 
 project. Press any key to continue."));
@@ -181,6 +183,9 @@ previous menu.')}
            }
            });
 }
+
+#' Close off the logfile
+if(file.exists('.logfile')) cat(')',file='.logfile',append=TRUE);
 #### create config file ####
 source('scripts/snippets.R');
 .newconfig <- filesections('config.R');

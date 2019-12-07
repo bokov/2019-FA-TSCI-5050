@@ -3,10 +3,11 @@
 #' ---
 #' 
 .projpackages <- c()
-.currentscript <- parent.frame(2)$ofile;
 .deps <- c( 'dictionary.R','simdata.R'); 
 #+ load_deps, echo=FALSE, messages=FALSE, warnings=FALSE
 .junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE));
+#.currentscript <- parent.frame(2)$ofile;
+.currentscript <- current_scriptname('prep_deps.R');
 .origfiles <- c();
 
 

@@ -12,7 +12,7 @@ is the time to cancel the deployment.
         
 You are running this at your own risk and with no warranty whatsoever.');
 .menu01 <- if(!interactive()) 2 else -1;
-if(file.exists('.auto.menu01.R')).menu01 <- source('.auto.menu01.R')$value;
+if(file.exists('.auto.menu01.R')) .menu01 <- source('.auto.menu01.R')$value;
 if(.menu01 ==  -1){
   .menu01 <- menu(c('Go ahead, I am ready and I know where my data is.'
                     ,'Stop this script without making any changes to my computer.'

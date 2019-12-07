@@ -185,7 +185,7 @@ previous menu.')}
 }
 
 #' Close off the logfile
-if(file.exists('.logfile')) cat(')',file='.logfile',append=TRUE);
+if(file.exists('.logfile')) cat('\n)',file='.logfile',append=TRUE);
 #### create config file ####
 source('scripts/snippets.R');
 .newconfig <- filesections('config.R');

@@ -15,9 +15,9 @@
 #' Replace `binary_outcome` and `numeric_outcome` below with vectors 
 #' containing one or more column names you actually want to serve as the 
 #' outcome variables
-binary_outcome <- choose_outcomes(dat01,c_safetf);
-numeric_outcome <- choose_outcomes(dat01,c_safenumeric);
-predictorvars <- choose_predictors(dat01,c_safe
+binary_outcome <- choose_outcomes(dat01,'c_safetf');
+numeric_outcome <- choose_outcomes(dat01,'c_safenumeric');
+predictorvars <- choose_predictors(dat01,'c_safe'
                                    ,exclude=c(binary_outcome,numeric_outcome));
 mainvars <- c(predictorvars,binary_outcome,numeric_outcome);
 

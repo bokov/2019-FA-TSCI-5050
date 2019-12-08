@@ -7,7 +7,7 @@
 #+ load_deps, echo=FALSE, messages=FALSE, warnings=FALSE
 .junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE));
 .currentscript <- current_scriptname('example_analysis.R');
-.origfiles <- c();
+.origfiles <- ls();
 
 #' ### Choosing predictor and response variables
 #' 

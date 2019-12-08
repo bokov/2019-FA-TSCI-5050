@@ -8,7 +8,6 @@
 .junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE));
 #.currentscript <- parent.frame(2)$ofile;
 .currentscript <- current_scriptname('prep_deps.R');
-.origfiles <- ls();
 
 
 

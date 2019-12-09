@@ -55,9 +55,9 @@ project here later. We recommend allowing this script to create a new directory,
 }
 
 
-gitbootstrap <- function(gitrepos=list(trailR=list(repo='bokov/trailR'
-                                                   ,ref='integration')
-                                       ,tidbits=list(repo='bokov/tidbits'
+gitbootstrap <- function(gitrepos=list(#trailR=list(repo='bokov/trailR'
+                                       #           ,ref='integration')
+                                       tidbits=list(repo='bokov/tidbits'
                                                      ,ref='integration')
                                        ,rio=list(repo='bokov/rio'
                                                  ,ref='master'))

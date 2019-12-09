@@ -1,5 +1,9 @@
 #' ---
 #' title: "Example Analysis"
+#' output:
+#'   html_document:
+#'     toc: true
+#'     toc_float: true
 #' ---
 #' 
 #' ### Settings 
@@ -30,6 +34,10 @@
 #' outcomes.
 binary_outcome <- choose_outcomes(dat01,'c_safetf');
 numeric_outcome <- choose_outcomes(dat01,'c_safenumeric');
+#' 
+#' Insuring that the binary outcomes get treated as discrete values
+#' 
+for(ii in binary_outcome) dat01[[ii]] <- factor(dat01[[ii]]);
 #' Again, replace `predictorvars` below with vectors containing one or more 
 #' column names you actually want to serve as the predictor variables
 predictorvars <- choose_predictors(dat01,'c_safe'
@@ -107,5 +115,5 @@ for(xx in bin_models) {cat('***','\n'); cat(pander(xx)); cat('***','\n');};
 #' place `r sprintf("\x60'%s'\x60",.currentscript)` among the values in their 
 #' `.deps` variables.
 save(file=paste0(.currentscript,'.rdata'),list=setdiff(ls(),.origfiles));
-#+ echo=FALSE
+#+ echo=FALSE, results='hide'
 c()
